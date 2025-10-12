@@ -26,12 +26,40 @@ function Createtodo(props) {
         setForm((prev)=>({...prev, [name]:value}))
     }
 
+    const localConversion = (startAt) => { //helper function to convert db iso string to local time
+        const date = new Date(startAt);
+        const tzOffset = date.getTimezoneOffset(); // in minutes
+        const localDate = new Date(date.getTime() - tzOffset*60000); // adjust to local
+        const localDateTime = localDate.toISOString().slice(0,16);
+        return localDateTime
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault()
 
         if(form.title =="" || form.description == ""){
             setMessage('Title and description fields are required!')
             return 
+        }
+
+        const currentLocalDate = localConversion(new Date().toISOString());
+
+        if(form.startAt){
+            if( new Date(form.startAt) < new Date(currentLocalDate)){
+                setMessage('Start date cannot be less than current date')
+                return
+            }            
+        }
+
+        if(form.endAt){
+            if( new Date(form.endAt) < new Date(currentLocalDate)){
+                setMessage('End date cannot be less than current date')
+                return
+            }
+            if( new Date(form.endAt) < new Date(form.startAt)){
+                setMessage('End date cannot be less than start date')
+                return
+            }
         }
         
         try{
@@ -94,6 +122,7 @@ function Createtodo(props) {
                     className="border p-2 m-2 rounded" />  
                     
                     <input type="datetime-local"
+                    id='startAt'
                     value={form.startAt}
                     name='startAt'
                     onChange={handleChange}
@@ -101,6 +130,7 @@ function Createtodo(props) {
                     />
 
                     <input type="datetime-local"
+                    id="endAt"
                     value={form.endAt}
                     name='endAt'
                     onChange={handleChange}

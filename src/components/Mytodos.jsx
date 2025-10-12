@@ -10,6 +10,7 @@ function Mytodos() {
 
   const [todos,     setTodos]     = useState([])
   const [showModal, setShowModal] = useState(false)
+  const [message,   setMessage]   = useState('')
   const [completeOperation, setCompleteOperation] = useState(false)
   const [update,    setUpdate]    = useState({
                                       todoId : '',
@@ -104,15 +105,40 @@ function Mytodos() {
   }
 
   const handleUpdateSubmit = async () => {
-  
+
+    if(update.title =="" || update.description == ""){
+      setMessage('Title and description fields are required!')
+      return 
+    }
+
+    const currentLocalDate = localConversion(new Date().toISOString());
+
+    if(update.startAt){
+      if( new Date(update.startAt) < new Date(currentLocalDate)){
+        setMessage('Start date cannot be less than current date')
+        return
+      }            
+    }
+
+    if(update.endAt){
+      if( new Date(update.endAt) < new Date(currentLocalDate)){
+        setMessage('End date cannot be less than current date')
+        return
+      }
+      if( new Date(update.endAt) < new Date(update.startAt)){
+        setMessage('End date cannot be less than start date')
+        return
+      }
+    }
+    
     try {
 
       const updatedData = {
         todoId : update.todoId,
         title : update.title,
         description : update.description,
-        startAt : new Date( update.startAt).toISOString(),
-        endAt :  new Date(update.endAt).toISOString()
+        startAt : update.startAt ? new Date(update.startAt).toISOString() : "",
+        endAt :  update.endAt ? new Date(update.endAt).toISOString() : ""
       }
 
       const response = await axios.post(`${VITE_BACKEND_URL}/todos/updateTodoById`, updatedData, {
@@ -132,7 +158,7 @@ function Mytodos() {
 
     }
     catch(err){
-      console.log("udpate data show error",err)
+      console.log("udpate data submit error",err)
     }
   }
  
@@ -235,6 +261,8 @@ function Mytodos() {
       {
         showModal ? (
           <div>
+
+            <div className='message'>{message ? message : ""}</div>
 
             <button onClick={()=> {setShowModal(false); setUpdate({title : "", description : ""})}}>Close</button>
 
