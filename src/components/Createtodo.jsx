@@ -3,8 +3,6 @@ import React, { useState } from 'react'
 import { toast } from "react-toastify";
 import { BellPlus } from 'lucide-react';
 
-
-
 const {VITE_BACKEND_URL} = import.meta.env
 
 function Createtodo(props) {
@@ -26,14 +24,6 @@ function Createtodo(props) {
         setForm((prev)=>({...prev, [name]:value}))
     }
 
-    const localConversion = (startAt) => { //helper function to convert db iso string to local time
-        const date = new Date(startAt);
-        const tzOffset = date.getTimezoneOffset(); // in minutes
-        const localDate = new Date(date.getTime() - tzOffset*60000); // adjust to local
-        const localDateTime = localDate.toISOString().slice(0,16);
-        return localDateTime
-    }
-
     const handleSubmit = async (e) => {
         e.preventDefault()
 
@@ -42,17 +32,15 @@ function Createtodo(props) {
             return 
         }
 
-        const currentLocalDate = localConversion(new Date().toISOString());
-
         if(form.startAt){
-            if( new Date(form.startAt) < new Date(currentLocalDate)){
+            if( new Date(form.startAt) < new Date()){
                 setMessage('Start date cannot be less than current date')
                 return
             }            
         }
 
         if(form.endAt){
-            if( new Date(form.endAt) < new Date(currentLocalDate)){
+            if( new Date(form.endAt) < new Date()){
                 setMessage('End date cannot be less than current date')
                 return
             }
@@ -66,6 +54,7 @@ function Createtodo(props) {
 
             form.startAt = form.startAt ? new Date(form.startAt).toISOString() : ""
             form.endAt = form.endAt ? new Date(form.endAt).toISOString() : ""
+
             const response = await axios.post(`${VITE_BACKEND_URL}/todos/createTodo`, form, {
                 headers : {
                     Authorization : `Bearer ${token}`,
@@ -85,7 +74,6 @@ function Createtodo(props) {
             if(response.data.statusCode == 201){
                 
                 setMessage(response.data.message)
-                
             }
         }
         catch(err){

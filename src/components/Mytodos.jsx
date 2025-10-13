@@ -3,6 +3,7 @@ import axios from "axios";
 import Createtodo from './Createtodo';
 import { toast } from 'react-toastify';
 import {CircleCheckBig, CircleX, Trash, Pencil   } from 'lucide-react'
+import { parseISO, format, isToday, differenceInCalendarDays } from 'date-fns';
 
 const {VITE_BACKEND_URL} = import.meta.env
 
@@ -60,14 +61,6 @@ function Mytodos() {
     }
   }
 
-  const localConversion = (startAt) => { //helper function to convert db iso string to local time
-    const date = new Date(startAt);
-    const tzOffset = date.getTimezoneOffset(); // in minutes
-    const localDate = new Date(date.getTime() - tzOffset*60000); // adjust to local
-    const localDateTime = localDate.toISOString().slice(0,16);
-    return localDateTime
-  }
-
   const handleUpdate = async (id, completeStatus) => {
     if(completeStatus == 1){
       toast.success('Todo marked as complete! cannot udpate')
@@ -84,12 +77,11 @@ function Mytodos() {
 
       const { todoId, title, description, startAt, endAt}  = response.data.data[0]
 
-      
       setUpdate({todoId : todoId, 
         title : title, 
         description : description, 
-        startAt : startAt ?  localConversion(startAt): "",
-        endAt : endAt ? localConversion(endAt) : ""})
+        startAt : startAt ?  format(parseISO(startAt), "yyyy-MM-dd'T'hh:mm") : "",
+        endAt : endAt ? format(parseISO(endAt), "yyyy-MM-dd'T'hh:mm") : ""})
 
     }
     catch(err){
@@ -111,17 +103,15 @@ function Mytodos() {
       return 
     }
 
-    const currentLocalDate = localConversion(new Date().toISOString());
-
     if(update.startAt){
-      if( new Date(update.startAt) < new Date(currentLocalDate)){
+      if( new Date(update.startAt) < new Date()){
         setMessage('Start date cannot be less than current date')
         return
       }            
     }
 
     if(update.endAt){
-      if( new Date(update.endAt) < new Date(currentLocalDate)){
+      if( new Date(update.endAt) < new Date()){
         setMessage('End date cannot be less than current date')
         return
       }
@@ -147,7 +137,6 @@ function Mytodos() {
             'Authorization' : `Bearer ${token}`
           }
       })
-
 
       if(response.data.statusCode == 200) {
         toast.success(response.data.message)
@@ -184,6 +173,23 @@ function Mytodos() {
     }
   }
 
+  const dateOperation = (startAt) => {
+    
+    const date = differenceInCalendarDays(startAt, new Date())
+    const parseDate = parseISO(startAt)
+    
+    if(date == 0){
+      return `Today, ${format(parseDate, "hh:mm a")}`
+    }
+    if(date > 0 && date < 7){
+      return `${format(parseDate, "EEE")}, ${format(parseDate, "hh:mm a")}`
+    }
+    if(date > 7 && date < 14){
+      return `Next Week, ${format(parseDate, "EEE")}`
+    }
+
+  }
+
   useEffect( ()=>{
 
    fetchTodos()
@@ -202,7 +208,9 @@ function Mytodos() {
       {todos && todos.length > 0 ? (
         <div className="space-y-2">
           {todos.map((value, index) => (
-            <div 
+
+            value && ((value.startAt > new Date().toISOString()) || value.startAt == "") && (
+              <div 
               key={value._id} 
               className="flex border w-4/5 items-center justify-between border-gray-400 rounded-lg p-3 mx-auto shadow-sm hover:shadow-md transition-shadow bg-white font-poppins"
             >
@@ -214,6 +222,15 @@ function Mytodos() {
                   {value.title}
                 </span>
               </span>
+
+              <div className='flex flex-col items-center justify-center'>
+                  <span className='text-xs text-gray-600'>
+                    starts in
+                  </span>
+                  <span className='text-sm'>
+                    {value.startAt ? dateOperation(value.startAt) : "No Date"}
+                  </span>
+              </div>
 
               <div className="flex items-center gap-1">
                 <button 
@@ -248,6 +265,8 @@ function Mytodos() {
                 </button>
               </div> 
             </div>
+            )
+            
           ))}
         </div>
       ) : (
