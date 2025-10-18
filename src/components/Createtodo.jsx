@@ -1,11 +1,12 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import { BellPlus } from "lucide-react";
+import { BellPlus, X } from "lucide-react";
+import TodoModal from "./TodoModal";
 
 const { VITE_BACKEND_URL } = import.meta.env;
 
-function Createtodo(props) {
+function CreateTodo(props) {
   const [showModal, setShowModal] = useState(false);
   const [message, setMessage] = useState("");
   const [form, setForm] = useState({
@@ -53,7 +54,7 @@ function Createtodo(props) {
       form.endAt = form.endAt ? new Date(form.endAt).toISOString() : "";
 
       const response = await axios.post(
-        `${VITE_BACKEND_URL}/todos/createTodo`,
+        `${VITE_BACKEND_URL}/todos/CreateTodo`,
         form,
         {
           headers: {
@@ -82,6 +83,7 @@ function Createtodo(props) {
   return (
     <>
       <button
+        className="mb-3"
         onClick={() => {
           setShowModal(true);
         }}
@@ -90,54 +92,14 @@ function Createtodo(props) {
       </button>
 
       {showModal ? (
-        <div className="container createTodoModal">
-          <div className="message">{message ? message : ""}</div>
-
-          <button
-            onClick={() => {
-              setShowModal(false);
-              setMessage("");
-            }}
-          >
-            Close
-          </button>
-
-          <input
-            type="text"
-            name="title"
-            value={form.title}
-            onChange={handleChange}
-            className="border p-2 m-2 rounded"
-          />
-
-          <input
-            type="text"
-            name="description"
-            value={form.description}
-            onChange={handleChange}
-            className="border p-2 m-2 rounded"
-          />
-
-          <input
-            type="datetime-local"
-            id="startAt"
-            value={form.startAt}
-            name="startAt"
-            onChange={handleChange}
-            placeholder="startAt"
-          />
-
-          <input
-            type="datetime-local"
-            id="endAt"
-            value={form.endAt}
-            name="endAt"
-            onChange={handleChange}
-            placeholder="endAt"
-          />
-
-          <button onClick={handleSubmit}>Create</button>
-        </div>
+        <TodoModal
+          data={form}
+          change={handleChange}
+          submit={handleSubmit}
+          message={message}
+          setShowModal={setShowModal}
+          setMessage={setMessage}
+        />
       ) : (
         ""
       )}
@@ -145,4 +107,4 @@ function Createtodo(props) {
   );
 }
 
-export default Createtodo;
+export default CreateTodo;

@@ -1,21 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 
 function TodoFilter() {
-
-    const [filter, setFilter] = useState({
-        createdDate : 'today'
-    })
+  const [filter, setFilter] = useState({
+    createdDate: "today",
+  });
 
   return (
     <>
-
-        <div>
-            <label htmlFor="">Created Date</label>
-            
-        </div>
-    
+      <div></div>
     </>
-  )
+  );
 }
 
-export default TodoFilter
+export default TodoFilter;

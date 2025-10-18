@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import TodoModal from "./TodoModal";
 
 const { VITE_BACKEND_URL } = import.meta.env;
 
-function TodoUpdateModal(props) {
+function UpdateTodo(props) {
   const { update, setShowModal, setUpdate, fetchTodos } = props;
+
+  console.log(update);
 
   const [message, setMessage] = useState("");
 
@@ -72,54 +75,16 @@ function TodoUpdateModal(props) {
   };
   return (
     <>
-      <div>
-        <div className="message">{message ? message : ""}</div>
-
-        <button
-          onClick={() => {
-            setShowModal(false);
-            setUpdate({ title: "", description: "" });
-          }}
-        >
-          Close
-        </button>
-
-        <input
-          type="text"
-          name="title"
-          value={update.title}
-          onChange={handleUpdateChange}
-          className="border p-2 m-2 rounded"
-        />
-
-        <input
-          type="text"
-          name="description"
-          value={update.description}
-          onChange={handleUpdateChange}
-          className="border p-2 m-2 rounded"
-        />
-
-        <input
-          type="datetime-local"
-          value={update.startAt}
-          name="startAt"
-          onChange={handleUpdateChange}
-          placeholder="startAt"
-        />
-
-        <input
-          type="datetime-local"
-          value={update.endAt}
-          name="endAt"
-          onChange={handleUpdateChange}
-          placeholder="endAt"
-        />
-
-        <button onClick={() => handleUpdateSubmit()}>Edit</button>
-      </div>
+      <TodoModal
+        data={update}
+        change={handleUpdateChange}
+        submit={handleUpdateSubmit}
+        message={message}
+        setShowModal={setShowModal}
+        setMessage={setMessage}
+      />
     </>
   );
 }
 
-export default TodoUpdateModal;
+export default UpdateTodo;

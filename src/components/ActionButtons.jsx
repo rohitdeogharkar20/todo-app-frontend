@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { CircleCheckBig, CircleX, Trash, Pencil } from "lucide-react";
 import { parseISO, format } from "date-fns";
-import TodoUpdateModal from "./TodoUpdateModal";
+import TodoUpdateModal from "./UpdateTodo";
 
 const { VITE_BACKEND_URL } = import.meta.env;
 
@@ -91,8 +91,8 @@ function ActionButtons(props) {
         todoId: todoId,
         title: title,
         description: description,
-        startAt: startAt ? format(parseISO(startAt), "yyyy-MM-dd'T'hh:mm") : "",
-        endAt: endAt ? format(parseISO(endAt), "yyyy-MM-dd'T'hh:mm") : "",
+        startAt: startAt ? format(parseISO(startAt), "yyyy-MM-dd'T'HH:mm") : "",
+        endAt: endAt ? format(parseISO(endAt), "yyyy-MM-dd'T'HH:mm") : "",
       });
     } catch (err) {
       console.log("udpate data show error", err);
@@ -101,7 +101,7 @@ function ActionButtons(props) {
 
   return (
     <>
-      <div className="flex items-center gap-1">
+      <div className="text-right font-poppins">
         <button
           title={
             value.completeStatus === 0
