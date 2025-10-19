@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import CreateTodo from "./CreateTodo";
 import Todofilter from "./TodoFilter";
-import Todo from "./Todo";
+import TodoBar from "./TodoBar";
+import TodoDetails from "./TodoDetails";
 
 const { VITE_BACKEND_URL } = import.meta.env;
 
 function Mytodos() {
   const [todos, setTodos] = useState([]);
+  const [showTodo, setShowTodo] = useState([]);
 
   const token = localStorage.getItem("token");
 
@@ -29,27 +31,48 @@ function Mytodos() {
     }
   };
 
+  const clickTodo = (data, index) => {
+    data.index = index;
+    setShowTodo((prev) => {
+      if (!prev.find((item) => item._id == data._id)) {
+        return [data, ...prev];
+      }
+      return prev;
+    });
+  };
+
+  const closeTodo = (value) => {
+    setShowTodo((prev) => prev.filter((item) => item._id != value._id));
+  };
+
   useEffect(() => {
     fetchTodos();
   }, []);
 
   return (
     <>
-      <div className="flex justify-center items-center h-screen">
-        <div className="container mx-auto w-full max-w-2xl bg-gray-50 rounded-lg py-8 shadow-lg font-poppins">
+      <div
+        className={`flex
+          justify-center
+         items-center h-screen text-center mx-auto px-auto`}
+      >
+        <div
+          className={`container flex-1 overflow-y-auto max-w-2xl bg-gray-50 rounded-lg py-8 shadow-lg font-poppins h-2/3`}
+        >
           <div className="flex justify-center items-center">
-            <CreateTodo renderList={fetchTodos} />
+            <CreateTodo className="fixed" renderList={fetchTodos} />
             <Todofilter />
           </div>
           {todos && todos.length > 0 ? (
             <div className="space-y-2">
               {todos.map((value, index) => {
                 return (
-                  <Todo
+                  <TodoBar
                     key={value._id}
                     value={value}
                     index={index}
                     fetchTodos={fetchTodos}
+                    clickTodo={clickTodo}
                   />
                 );
               })}
@@ -63,6 +86,12 @@ function Mytodos() {
             </div>
           )}
         </div>
+
+        {showTodo && showTodo.length > 0 && (
+          <div className="flex flex-col overflow-y-auto ml-3 bg-gray-50 border border-gray-400 p-4 rounded-lg shadow-xl h-2/3 w-[450px] min-w-[450px] max-w-[450px]">
+            <TodoDetails showTodo={showTodo} closeTodo={closeTodo} />
+          </div>
+        )}
       </div>
     </>
   );

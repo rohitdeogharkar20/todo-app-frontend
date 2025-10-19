@@ -8,8 +8,6 @@ const { VITE_BACKEND_URL } = import.meta.env;
 function UpdateTodo(props) {
   const { update, setShowModal, setUpdate, fetchTodos } = props;
 
-  console.log(update);
-
   const [message, setMessage] = useState("");
 
   const token = localStorage.getItem("token");
@@ -22,6 +20,11 @@ function UpdateTodo(props) {
   const handleUpdateSubmit = async () => {
     if (update.title == "" || update.description == "") {
       setMessage("Title and description fields are required!");
+      return;
+    }
+
+    if (update.title.length > 20) {
+      setMessage("Title can be of max 20 letters!");
       return;
     }
 
@@ -82,6 +85,7 @@ function UpdateTodo(props) {
         message={message}
         setShowModal={setShowModal}
         setMessage={setMessage}
+        operation="update"
       />
     </>
   );

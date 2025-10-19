@@ -14,7 +14,7 @@ function DateOperations(props) {
     const minuteDiff = differenceInMinutes(startAt, new Date());
     const parseDate = parseISO(startAt);
 
-    if (date == 0 && minuteDiff < 15) {
+    if (date == 0 && minuteDiff > 0 && minuteDiff < 15) {
       return `In ${Number(minuteDiff) + 1} mins`;
     }
     if (date == 0) {
@@ -32,7 +32,8 @@ function DateOperations(props) {
     <>
       <div className="flex flex-col items-center justify-center font-poppins">
         <span className="text-xs text-gray-600">
-          {differenceInMinutes(value.startAt, new Date()) < 15
+          {differenceInMinutes(value.startAt, new Date()) < 15 &&
+          differenceInMinutes(value.startAt, new Date()) > 0
             ? `Starts In`
             : `Starts At`}
         </span>

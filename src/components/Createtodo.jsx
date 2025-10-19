@@ -31,6 +31,11 @@ function CreateTodo(props) {
       return;
     }
 
+    if (form.title.length > 20) {
+      setMessage("Title can be of max 20 letters!");
+      return;
+    }
+
     if (form.startAt) {
       if (new Date(form.startAt) < new Date()) {
         setMessage("Start date cannot be less than current date");
@@ -99,6 +104,7 @@ function CreateTodo(props) {
           message={message}
           setShowModal={setShowModal}
           setMessage={setMessage}
+          operation="create"
         />
       ) : (
         ""

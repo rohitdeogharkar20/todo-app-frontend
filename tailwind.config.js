@@ -11,9 +11,14 @@ export default {
           "0%": { transform: "translateY(40px)", opacity: "0" },
           "100%": { transform: "translateY(0)", opacity: "1" },
         },
+        slideOut: {
+          "0%": { transform: "translateY(0)", opacity: "1" },
+          "100%": { transform: "translateY(40px)", opacity: "0" },
+        },
       },
       animation: {
         slideIn: "slideIn 0.3s forwards",
+        slideOut: "slideOut 0.3s forwards",
       },
     },
   },
