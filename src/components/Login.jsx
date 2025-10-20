@@ -58,35 +58,61 @@ function Login(props) {
 
   return (
     <>
-      <div className="container flex items-center justify-center border border-blue-800">
-        <form onSubmit={handleSubmit}>
-          <div>
-            {message && message.wrongCredentials
-              ? message.wrongCredentials
-              : ""}
-          </div>
-          <div>{message && message.mandate ? message.mandate : ""}</div>
+      <div className="animate-slideIn flex items-center justify-center min-h-screen bg-gradient-to-r  font-[Poppins]">
+        <div className="w-full max-w-sm bg-white shadow-lg rounded-2xl p-8 border border-blue-200">
+          <h2 className="text-2xl font-semibold text-center text-blue-700 mb-6">
+            Login
+          </h2>
 
-          <input
-            type="text"
-            name="username"
-            value={form.username}
-            onChange={handleChange}
-            placeholder="Username"
-          />
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            {/* Error Messages */}
+            {message && (
+              <div className="text-red-500 text-sm text-center">
+                {message.wrongCredentials || message.mandate || ""}
+              </div>
+            )}
 
-          <input
-            type="password"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            placeholder="password"
-          />
+            {/* Username */}
+            <input
+              type="text"
+              name="username"
+              value={form.username}
+              onChange={handleChange}
+              placeholder="Username"
+              className="border border-blue-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
+            />
 
-          <button type="submit" disabled={loading}>
-            {loading ? "Submiting..." : "Login"}
-          </button>
-        </form>
+            {/* Password */}
+            <input
+              type="password"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              placeholder="Password"
+              className="border border-blue-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
+            />
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-all disabled:opacity-50"
+            >
+              {loading ? "Submitting..." : "Login"}
+            </button>
+          </form>
+
+          {/* Register Section */}
+          <p className="text-center text-sm text-gray-600 mt-6">
+            Don’t have an account?{" "}
+            <a
+              href="/register"
+              className="text-blue-600 font-medium hover:underline hover:text-blue-700 transition-all"
+            >
+              Register here
+            </a>
+          </p>
+        </div>
       </div>
     </>
   );

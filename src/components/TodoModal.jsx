@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { X } from "lucide-react";
+import ThemeContext from "./context/ThemeContext";
 
 function TodoModal(props) {
   const { data, change, submit, message, setShowModal, setMessage, operation } =
     props;
 
   const [closing, setClosing] = useState(false);
+
+  const { theme } = useContext(ThemeContext);
 
   const handleClose = () => {
     setClosing(true); // trigger slide-out
@@ -20,6 +23,7 @@ function TodoModal(props) {
       handleClose();
     }
   };
+
   return (
     <>
       <div
@@ -111,7 +115,14 @@ function TodoModal(props) {
 
           <button
             onClick={submit}
-            className="bg-blue-600 text-white rounded-lg px-4 py-2 mt-3 hover:bg-blue-700 transition"
+            style={
+              theme == "light"
+                ? { background: "#B4DEBD " }
+                : { background: "#37353E" }
+            }
+            className={`${
+              theme == "light" ? "text-black" : "text-white"
+            } rounded-lg px-4 py-2 mt-3 hover:bg-blue-700 transition`}
           >
             Save
           </button>

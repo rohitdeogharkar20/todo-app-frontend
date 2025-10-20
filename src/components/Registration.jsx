@@ -54,79 +54,101 @@ function Registration() {
 
   return (
     <>
-      <div className="container">
-        <form className="container" onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            value={form.username}
-            onChange={handleChange}
-            className="border p-2 m-2 rounded"
-          />
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-r  font-poppins">
+        <div className="w-full max-w-sm bg-white shadow-lg rounded-2xl p-8 border border-blue-200 animate-slideIn">
+          <h2 className="text-2xl font-semibold text-center text-blue-700 mb-6">
+            Register
+          </h2>
 
-          <div className="message">
-            {message && message.message.username
-              ? message.message.username.message
-              : ""}
-          </div>
-          <div className="message">
-            {message && message.statusCode == 201 ? message.message : ""}
-          </div>
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+            {/* Username */}
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              value={form.username}
+              onChange={handleChange}
+              className="border border-blue-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
+            />
+            {message?.message?.username?.message && (
+              <div className="text-red-500 text-sm">
+                {message.message.username.message}
+              </div>
+            )}
 
-          <input
-            type="text"
-            name="email"
-            placeholder="Email"
-            value={form.email}
-            onChange={handleChange}
-            className="border p-2 m-2 rounded"
-          />
+            {/* Email */}
+            <input
+              type="text"
+              name="email"
+              placeholder="Email"
+              value={form.email}
+              onChange={handleChange}
+              className="border border-blue-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
+            />
+            {message?.message?.email?.message && (
+              <div className="text-red-500 text-sm">
+                {message.message.email.message}
+              </div>
+            )}
 
-          <div className="message">
-            {message && message.message.email
-              ? message.message.email.message
-              : ""}
-          </div>
+            {/* Password */}
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={form.password}
+              onChange={handleChange}
+              className="border border-blue-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
+            />
+            {message?.message?.password?.message && (
+              <div className="text-red-500 text-sm">
+                {message.message.password.message}
+              </div>
+            )}
 
-          <input
-            type="text"
-            name="password"
-            placeholder="Password"
-            value={form.password}
-            onChange={handleChange}
-            className="border p-2 m-2 rounded"
-          />
+            {/* Confirm Password */}
+            <input
+              type="password"
+              name="confirmPassword"
+              placeholder="Confirm Password"
+              value={form.confirmPassword}
+              onChange={handleChange}
+              className="border border-blue-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
+            />
+            {message?.message?.confirmPassword?.message && (
+              <div className="text-red-500 text-sm">
+                {message.message.confirmPassword.message}
+              </div>
+            )}
 
-          <div className="message">
-            {message && message.message.password
-              ? message.message.password.message
-              : ""}
-          </div>
+            {/* Success Message */}
+            {message?.statusCode === 201 && (
+              <div className="text-green-600 text-center text-sm font-medium">
+                {message.message}
+              </div>
+            )}
 
-          <input
-            type="text"
-            name="confirmPassword"
-            placeholder="Confirm  Password"
-            value={form.confirmPassword}
-            onChange={handleChange}
-            className="border p-2 m-2 rounded"
-          />
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-all disabled:opacity-50"
+            >
+              {loading ? "Submitting..." : "Register"}
+            </button>
+          </form>
 
-          <div className="message">
-            {message && message.message.confirmPassword
-              ? message.message.confirmPassword.message
-              : ""}
-          </div>
-
-          <button
-            type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded"
-            disabled={loading}
-          >
-            {loading ? "Submitting..." : "Register"}
-          </button>
-        </form>
+          {/* Go to Login Section */}
+          <p className="text-center text-sm text-gray-600 mt-6">
+            Already have an account?{" "}
+            <a
+              href="/login"
+              className="text-blue-600 font-medium hover:underline hover:text-blue-700 transition-all"
+            >
+              Login here
+            </a>
+          </p>
+        </div>
       </div>
     </>
   );

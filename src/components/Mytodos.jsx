@@ -5,6 +5,7 @@ import Todofilter from "./TodoFilter";
 import TodoBar from "./TodoBar";
 import TodoDetails from "./TodoDetails";
 
+
 const { VITE_BACKEND_URL } = import.meta.env;
 
 function Mytodos() {
@@ -24,12 +25,22 @@ function Mytodos() {
           },
         }
       );
-
-      setTodos(response.data.data);
+      const { data } = response.data;
+      setTodos(data);
     } catch (err) {
       console.log("to do list error", err);
     }
   };
+
+  useEffect(() => {
+    if (showTodo.length > 0 && todos.length > 0) {
+      setShowTodo((prev) =>
+        prev
+          .map((selected) => todos.find((t) => t._id === selected._id))
+          .filter(Boolean)
+      );
+    }
+  }, [todos]);
 
   const clickTodo = (data, index) => {
     data.index = index;
@@ -44,6 +55,7 @@ function Mytodos() {
   const closeTodo = (value) => {
     setShowTodo((prev) => prev.filter((item) => item._id != value._id));
   };
+
 
   useEffect(() => {
     fetchTodos();

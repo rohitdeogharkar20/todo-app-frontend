@@ -13,6 +13,8 @@ import Login from "./components/Login";
 import { useState } from "react";
 import Privateroute from "./components/Privateroute";
 import Mytodos from "./components/Mytodos";
+import Layout from "./components/Layout";
+import { ThemeProvider } from "./components/context/ThemeContext";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -21,28 +23,40 @@ function App() {
 
   return (
     <>
-      <ToastContainer position="top-right" autoClose={1000} />
+      <ToastContainer position="top-right" autoClose={1000} /> {/* toast notification */}
+
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Navigate to="/login" />} />
 
-          <Route
-            path="/login"
-            element={<Login setIsAuthenticated={setIsAuthenticated} />}
-          />
-          <Route path="/register" element={<Registration />} />
+        <ThemeProvider> {/* context api */}
 
-          <Route
-            path="/mytodo"
-            element={
-              <Privateroute isAuthenticated={isAuthenticated}>
-                <Mytodos />
-              </Privateroute>
-            }
-          />
+          <Routes>
 
-          <Route path="*" element={<h1>404 Page Not Found!</h1>} />
-        </Routes>
+            <Route path="/" element={<Navigate to="/login" />} />
+
+            <Route
+              path="/login"
+              element={<Login setIsAuthenticated={setIsAuthenticated} />}
+            />
+            
+            <Route path="/register" element={<Registration />} />
+
+            <Route element={<Layout />}>
+              <Route
+                path="/mytodo"
+                element={
+                  <Privateroute isAuthenticated={isAuthenticated}>
+                    <Mytodos />
+                  </Privateroute>
+                }
+              />
+            </Route>
+
+            <Route path="*" element={<h1>404 Page Not Found!</h1>} />
+
+          </Routes>
+
+        </ThemeProvider>
+
       </BrowserRouter>
     </>
   );
