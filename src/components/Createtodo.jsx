@@ -26,8 +26,20 @@ function CreateTodo(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    console.log("first", form.startAt);
+
     if (form.title == "" || form.description == "") {
       setMessage("Title and description fields are required!");
+      return;
+    }
+
+    if (form.startAt == "") {
+      setMessage("Start Time is required");
+      return;
+    }
+
+    if (isNaN(new Date(form.startAt).getTime())) {
+      setMessage("Start Date is not Valid");
       return;
     }
 

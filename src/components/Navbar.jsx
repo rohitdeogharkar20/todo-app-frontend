@@ -3,6 +3,7 @@ import ThemeContext from "./context/ThemeContext";
 
 function Navbar() {
   const { theme, toggleTheme } = useContext(ThemeContext);
+  const username = localStorage.getItem("username");
 
   return (
     <nav
@@ -27,6 +28,7 @@ function Navbar() {
           <button onClick={toggleTheme}>
             {theme == "dark" ? "Light" : "Dark"}
           </button>
+          <span>{username}</span>
         </div>
       </div>
     </nav>

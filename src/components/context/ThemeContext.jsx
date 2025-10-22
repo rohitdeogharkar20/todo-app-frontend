@@ -10,7 +10,8 @@ export const ThemeProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    document.body.style.backgroundColor = theme == "dark" ? "#37353E" : "#B4DEBD";
+    document.body.style.backgroundColor =
+      theme == "dark" ? "#37353E" : "#B4DEBD";
   }, [theme]);
 
   return (
