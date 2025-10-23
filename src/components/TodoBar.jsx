@@ -3,7 +3,7 @@ import ActionButtons from "./ActionButtons";
 import DateOperations from "./DateOperations";
 
 function TodoBar(props) {
-  const { value, index, fetchTodos, clickTodo } = props;
+  const { value, index, fetchTodos, clickTodo, filter } = props;
 
   return (
     <>
@@ -28,7 +28,7 @@ function TodoBar(props) {
         </span>
 
         <DateOperations value={value} />
-        <ActionButtons value={value} fetchTodos={fetchTodos} />
+        <ActionButtons value={value} filter={filter} fetchTodos={fetchTodos} />
       </div>
     </>
   );

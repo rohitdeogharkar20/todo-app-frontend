@@ -4,20 +4,30 @@ import CreateTodo from "./CreateTodo";
 import Todofilter from "./TodoFilter";
 import TodoBar from "./TodoBar";
 import TodoDetails from "./TodoDetails";
-
+import { addDays, startOfDay, format, subDays, endOfDay } from "date-fns";
 
 const { VITE_BACKEND_URL } = import.meta.env;
 
 function Mytodos() {
   const [todos, setTodos] = useState([]);
   const [showTodo, setShowTodo] = useState([]);
+  const [filter, setFilter] = useState({
+    startAt: "today",
+  });
 
   const token = localStorage.getItem("token");
 
-  const fetchTodos = async () => {
+  const fetchTodos = async (filter) => {
+    const postData = {
+      filter: createFilter(filter),
+      page: 1,
+      limit: 10,
+    };
+    console.log(createFilter(filter));
     try {
-      const response = await axios.get(
+      const response = await axios.post(
         `${VITE_BACKEND_URL}/todos/getTodoList`,
+        postData,
         {
           headers: {
             "Content-Type": "application/json",
@@ -32,16 +42,6 @@ function Mytodos() {
     }
   };
 
-  useEffect(() => {
-    if (showTodo.length > 0 && todos.length > 0) {
-      setShowTodo((prev) =>
-        prev
-          .map((selected) => todos.find((t) => t._id === selected._id))
-          .filter(Boolean)
-      );
-    }
-  }, [todos]);
-
   const clickTodo = (data, index) => {
     data.index = index;
     setShowTodo((prev) => {
@@ -52,14 +52,56 @@ function Mytodos() {
     });
   };
 
+  const createFilter = (filter) => {
+    if (filter) {
+      if (filter.startAt) {
+        if (filter.startAt == "yesterday") {
+          console.log("first");
+          filter.startAt = {
+            $gt: startOfDay(subDays(new Date(), 1)).toISOString(),
+            $lt: endOfDay(subDays(new Date(), 1)).toISOString(),
+          };
+        }
+        if (filter.startAt == "today") {
+          filter.startAt = {
+            $gt: startOfDay(new Date()).toISOString(),
+            $lt: endOfDay(new Date()).toISOString(),
+          };
+        }
+        if (filter.startAt == "tomorrow") {
+          filter.startAt = {
+            $gt: startOfDay(addDays(new Date(), 1)).toISOString(),
+            $lt: endOfDay(addDays(new Date(), 1)).toISOString(),
+          };
+        }
+      }
+    } else {
+      console.log("invalid filter");
+      return;
+    }
+
+    return filter;
+  };
+
   const closeTodo = (value) => {
     setShowTodo((prev) => prev.filter((item) => item._id != value._id));
   };
 
+  useEffect(() => {
+    fetchTodos(filter);
+  }, []);
 
   useEffect(() => {
-    fetchTodos();
-  }, []);
+    if (showTodo && todos) {
+      if (showTodo.length > 0 && todos.length > 0) {
+        setShowTodo((prev) =>
+          prev
+            .map((selected) => todos.find((t) => t._id === selected._id))
+            .filter(Boolean)
+        );
+      }
+    }
+  }, [todos]);
 
   return (
     <>
@@ -72,8 +114,16 @@ function Mytodos() {
           className={`container flex-1 overflow-y-auto max-w-2xl bg-gray-50 rounded-lg py-8 shadow-lg font-poppins h-2/3`}
         >
           <div className="flex justify-center items-center">
-            <CreateTodo className="fixed" renderList={fetchTodos} />
-            <Todofilter />
+            <CreateTodo
+              className="fixed"
+              filter={filter}
+              fetchTodos={fetchTodos}
+            />
+            <Todofilter
+              filter={filter}
+              setFilter={setFilter}
+              fetchTodos={fetchTodos}
+            />
           </div>
           {todos && todos.length > 0 ? (
             <div className="space-y-2">
@@ -85,6 +135,7 @@ function Mytodos() {
                     index={index}
                     fetchTodos={fetchTodos}
                     clickTodo={clickTodo}
+                    filter={filter}
                   />
                 );
               })}

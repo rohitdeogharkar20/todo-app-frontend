@@ -3,12 +3,12 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { CircleCheckBig, CircleX, Trash, Pencil } from "lucide-react";
 import { parseISO, format } from "date-fns";
-import TodoUpdateModal from "./UpdateTodo";
+import UpdateTodo from "./UpdateTodo";
 
 const { VITE_BACKEND_URL } = import.meta.env;
 
 function ActionButtons(props) {
-  const { value, fetchTodos } = props;
+  const { value, fetchTodos, filter } = props;
 
   const token = localStorage.getItem("token");
 
@@ -36,7 +36,7 @@ function ActionButtons(props) {
 
       if (response.data.statusCode == 200) {
         toast.success("Todo Delete Success");
-        fetchTodos();
+        fetchTodos(filter);
       }
     } catch (err) {
       console.log("delete todo error", err);
@@ -60,7 +60,7 @@ function ActionButtons(props) {
 
       if (response.data.statusCode == 200) {
         toast.success(response.data.message);
-        fetchTodos();
+        fetchTodos(filter);
       }
     } catch (err) {
       console.log("complete operation error", err);
@@ -140,11 +140,12 @@ function ActionButtons(props) {
       </div>
 
       {showModal ? (
-        <TodoUpdateModal
+        <UpdateTodo
           update={update}
           setShowModal={setShowModal}
           setUpdate={setUpdate}
           fetchTodos={fetchTodos}
+          filter={filter}
         />
       ) : (
         ""

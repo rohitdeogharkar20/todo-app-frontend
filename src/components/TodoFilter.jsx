@@ -1,24 +1,41 @@
 import React, { useState } from "react";
+import Select from "react-select";
 
-function TodoFilter() {
-  const [date, setDate] = useState();
+function TodoFilter(props) {
+  const { filter, setFilter, fetchTodos } = props;
+  const dateOptions = [
+    { label: "Today", value: "today" },
+    { label: "Yesterday", value: "yesterday" },
+    { label: "Tomorrow", value: "tomorrow" },
+    // { label: "Custom Date", value: "customDate" },
+  ];
+
+  const completeOptions = [
+    { label: "Yes", value: 1 },
+    { label: "No", value: 0 },
+  ];
 
   return (
     <>
-      <form class="max-w-sm mx-auto">
-        <label for="underline_select" class="sr-only">
-          Underline select
-        </label>
-        <select
-          id="underline_select"
-          class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
-        >
-          <option value="today">Today</option>
-          <option value="yesterday">Yesterday</option>
-          <option value="tomorrow">Tomorrow</option>
-          <option value="customDateRange">Custom Date Range</option>
-        </select>
-      </form>
+      <div className="flex justify-between items-center gap-2 m-4">
+        <Select
+          className="basic-single "
+          classNamePrefix="select"
+          options={dateOptions}
+          defaultValue={dateOptions[0]}
+          onChange={(e) => setFilter((prev) => ({ ...prev, startAt: e.value }))}
+        />
+        <Select
+          className="basic-single"
+          classNamePrefix="select"
+          options={completeOptions}
+          name="completeStatus"
+          onChange={(e) =>
+            setFilter((prev) => ({ ...prev, completeStatus: e.value }))
+          }
+        />
+        <button onClick={() => fetchTodos(filter)}>Filter</button>
+      </div>
     </>
   );
 }

@@ -7,6 +7,9 @@ import TodoModal from "./TodoModal";
 const { VITE_BACKEND_URL } = import.meta.env;
 
 function CreateTodo(props) {
+
+  const {filter, fetchTodos} = props
+
   const [showModal, setShowModal] = useState(false);
   const [message, setMessage] = useState("");
   const [form, setForm] = useState({
@@ -86,7 +89,7 @@ function CreateTodo(props) {
         setShowModal(false);
         setMessage("");
         setForm({ title: "", description: "" });
-        props.renderList();
+        fetchTodos(filter);
       }
       if (response.data.statusCode == 201) {
         setMessage(response.data.message);

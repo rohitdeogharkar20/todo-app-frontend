@@ -6,7 +6,7 @@ import TodoModal from "./TodoModal";
 const { VITE_BACKEND_URL } = import.meta.env;
 
 function UpdateTodo(props) {
-  const { update, setShowModal, setUpdate, fetchTodos } = props;
+  const { update, setShowModal, setUpdate, fetchTodos, filter } = props;
 
   const [message, setMessage] = useState("");
 
@@ -70,7 +70,7 @@ function UpdateTodo(props) {
         toast.success(response.data.message);
         setShowModal(false);
         setUpdate({ title: "", description: "" });
-        fetchTodos();
+        fetchTodos(filter);
       }
     } catch (err) {
       console.log("udpate data submit error", err);
