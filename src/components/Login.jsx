@@ -45,7 +45,7 @@ function Login(props) {
         if (response.data.statusCode == 200) {
           localStorage.setItem("token", response.data.token);
           props.setIsAuthenticated(true);
-          localStorage.setItem("username", response.data.username);
+          // localStorage.setItem("username", response.data.username);
           navigate("/mytodo");
           toast.success("User Logged In Successfully!");
         }

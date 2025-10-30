@@ -15,6 +15,7 @@ import Privateroute from "./components/Privateroute";
 import Mytodos from "./components/Mytodos";
 import Layout from "./components/Layout";
 import { ThemeProvider } from "./components/context/ThemeContext";
+import Chat from "./components/Chat";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -23,21 +24,20 @@ function App() {
 
   return (
     <>
-      <ToastContainer position="top-right" autoClose={1000} /> {/* toast notification */}
-
+      <ToastContainer position="top-right" autoClose={1000} />{" "}
+      {/* toast notification */}
       <BrowserRouter>
-
-        <ThemeProvider> {/* context api */}
-
+        <ThemeProvider>
+          {" "}
+          {/* context api */}
           <Routes>
-
             <Route path="/" element={<Navigate to="/login" />} />
 
             <Route
               path="/login"
               element={<Login setIsAuthenticated={setIsAuthenticated} />}
             />
-            
+
             <Route path="/register" element={<Registration />} />
 
             <Route element={<Layout />}>
@@ -49,14 +49,20 @@ function App() {
                   </Privateroute>
                 }
               />
+
+              <Route
+                path="/chat"
+                element={
+                  <Privateroute isAuthenticated={isAuthenticated}>
+                    <Chat />
+                  </Privateroute>
+                }
+              />
             </Route>
 
             <Route path="*" element={<h1>404 Page Not Found!</h1>} />
-
           </Routes>
-
         </ThemeProvider>
-
       </BrowserRouter>
     </>
   );

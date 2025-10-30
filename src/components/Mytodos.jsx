@@ -23,7 +23,7 @@ function Mytodos() {
       page: 1,
       limit: 10,
     };
-    console.log(createFilter(filter));
+    
     try {
       const response = await axios.post(
         `${VITE_BACKEND_URL}/todos/getTodoList`,

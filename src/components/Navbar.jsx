@@ -1,9 +1,13 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ThemeContext from "./context/ThemeContext";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+const { VITE_BACKEND_URL } = import.meta.env;
 
 function Navbar() {
-  const { theme, toggleTheme } = useContext(ThemeContext);
-  const username = localStorage.getItem("username");
+  const { theme, toggleTheme, username } = useContext(ThemeContext);
+  const navigate = useNavigate();
 
   return (
     <nav
@@ -18,6 +22,12 @@ function Navbar() {
         <div className="flex items-center gap-6">
           <button className="hover:text-blue-400 transition-colors">
             Home
+          </button>
+          <button
+            onClick={() => navigate("/chat")}
+            className="hover:text-blue-400 transition-colors"
+          >
+            Chat
           </button>
           <button className="hover:text-blue-400 transition-colors">
             Tasks
