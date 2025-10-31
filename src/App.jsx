@@ -6,16 +6,16 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import Registration from "./components/Registration";
+import Registration from "./pages/Registration";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Login from "./components/Login";
+import Login from "./pages/Login";
 import { useState } from "react";
-import Privateroute from "./components/Privateroute";
-import Mytodos from "./components/Mytodos";
+import Privateroute from "./routes/Privateroute";
+import Mytodos from "./pages/Mytodos";
 import Layout from "./components/Layout";
-import { ThemeProvider } from "./components/context/ThemeContext";
-import Chat from "./components/Chat";
+import { ThemeProvider } from "./context/ThemeContext";
+import Chat from "./pages/Chat";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(

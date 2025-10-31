@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import CreateTodo from "./CreateTodo";
-import Todofilter from "./TodoFilter";
-import TodoBar from "./TodoBar";
-import TodoDetails from "./TodoDetails";
+import CreateTodo from "../components/todo/Createtodo";
+import Todofilter from "../components/todo/TodoFilter";
+import TodoBar from "../components/todo/TodoBar";
+import TodoDetails from "../components/todo/TodoDetails";
 import { addDays, startOfDay, format, subDays, endOfDay } from "date-fns";
 
 const { VITE_BACKEND_URL } = import.meta.env;

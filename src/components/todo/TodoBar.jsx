@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ActionButtons from "./ActionButtons";
-import DateOperations from "./DateOperations";
+import DateOperations from "../dates/DateOperations";
 
 function TodoBar(props) {
   const { value, index, fetchTodos, clickTodo, filter } = props;

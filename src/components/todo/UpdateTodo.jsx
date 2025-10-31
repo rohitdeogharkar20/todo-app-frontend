@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import TodoModal from "./TodoModal";
+import TodoModal from "../modal/TodoModal";
 
 const { VITE_BACKEND_URL } = import.meta.env;
 

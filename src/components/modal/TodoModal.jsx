@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { X } from "lucide-react";
-import ThemeContext from "./context/ThemeContext";
+import ThemeContext from "../../context/ThemeContext";
 
 function TodoModal(props) {
   const { data, change, submit, message, setShowModal, setMessage, operation } =

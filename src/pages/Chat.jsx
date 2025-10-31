@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { socket } from "./Socket";
-import Messages from "./Messages";
+import { socket } from "../socket/Socket";
+import Messages from "../components/chat/Messages";
 import { useContext } from "react";
-import ThemeContext from "./context/ThemeContext";
+import ThemeContext from "../context/ThemeContext";
 
 function Chat() {
   const { username } = useContext(ThemeContext);
