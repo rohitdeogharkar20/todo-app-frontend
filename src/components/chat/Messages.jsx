@@ -1,28 +1,53 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { useRef } from "react";
 
 function Messages(props) {
-  const { messages, handleScroll, username } = props;
+  const { showMessage, roomName, socket, username, setShowMessage } = props;
+
+  const [pagination, setPagination] = useState(0);
   let messageRef = useRef(0);
-  // console.log(messageRef.current.scrollTop);
 
-  if (messageRef.current.scrollTop > 0) {
+  // if (messageRef.current.scrollTop > 0) {
+  //   messageRef.current.scrollTop = messageRef.current.scrollHeight;
+  // }
 
-    console.log(messageRef.current.scrollHeight)
-    messageRef.current.scrollTop = messageRef.current.scrollHeight;
-  }
+  const handleScroll = (e) => {
+    let { scrollTop } = e.target;
+    if (scrollTop % 80 === 0) {
+      setPagination(pagination + 10);
+    }
+  };
+
+  useEffect(() => {
+    if (roomName) {
+      socket.emit("previousMessages", { username, roomName, pagination });
+    }
+  }, [pagination]);
+
+  useEffect(() => {
+    socket.on("receiveMessage", (data) => {
+      setShowMessage((prev) => [...prev, data]);
+    });
+
+    socket.on("previousMessages", (data) => {
+      let messageArray = data.data;
+      if (messageArray.length > 0) {
+        setShowMessage((prev) => [...prev, ...data.data]);
+      }
+    });
+  }, []);
+
   return (
     <>
-      {/* <div className="container overflow-y-auto h-3/4 border border-red-700"> */}
       <div
         onScroll={handleScroll}
         ref={messageRef}
         className="container flex flex-col justify-between overflow-y-auto h-40 border border-red-700 w-1/2"
       >
-        {messages &&
-          messages.length > 0 &&
-          messages.map((item, i) => {
+        {showMessage &&
+          showMessage.length > 0 &&
+          showMessage.map((item, i) => {
             return (
               <p
                 className={`${
@@ -37,13 +62,13 @@ function Messages(props) {
             //   return (
             //     <p
             //       className={`${
-            //         messages[messages.length - i].username == username
+            //         showMessage[showMessage.length - i].username == username
             //           ? "text-right"
             //           : ""
             //       } p-1/2 m-1`}
             //       key={i}
             //     >
-            //       {messages[messages.length - i].message}
+            //       {showMessage[showMessage.length - i].message}
             //     </p>
             //   );
             // }
