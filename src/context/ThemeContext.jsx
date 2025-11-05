@@ -8,8 +8,11 @@ const ThemeContext = createContext();
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState("light");
   const [username, setUserName] = useState("");
+  // const [token, setToken] = useState("")
 
   const token = localStorage.getItem("token");
+  // console.log("ThemeProvider")
+  // setToken(localStorage.getItem("token"))
 
   const toggleTheme = () => {
     setTheme((prev) => (prev == "light" ? "dark" : "light"));
@@ -21,20 +24,29 @@ export const ThemeProvider = ({ children }) => {
   }, [theme]);
 
   const getDetails = async () => {
-    const result = await axios.get(`${VITE_BACKEND_URL}/users/myDetails`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    // console.log(result);
-    const { data } = result;
-    setUserName(data.username);
+    try {
+      if (token) {
+        const result = await axios.get(`${VITE_BACKEND_URL}/users/myDetails`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        // console.log(result);
+        const { data } = result;
+        setUserName(data.username);
+      }
+    } catch (err) {
+      console.error("mydetails error", err);
+    }
   };
 
   useEffect(() => {
-    getDetails();
-  }, []);
+    // console.log(token);
+    // if (token) {
+      getDetails();
+    // }
+  }, [token]);
 
   return (
     <>

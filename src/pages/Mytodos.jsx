@@ -23,7 +23,7 @@ function Mytodos() {
       page: 1,
       limit: 10,
     };
-    
+
     try {
       const response = await axios.post(
         `${VITE_BACKEND_URL}/todos/getTodoList`,
@@ -56,7 +56,6 @@ function Mytodos() {
     if (filter) {
       if (filter.startAt) {
         if (filter.startAt == "yesterday") {
-          console.log("first");
           filter.startAt = {
             $gt: startOfDay(subDays(new Date(), 1)).toISOString(),
             $lt: endOfDay(subDays(new Date(), 1)).toISOString(),

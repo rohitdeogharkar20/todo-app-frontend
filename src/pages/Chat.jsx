@@ -7,34 +7,30 @@ import ChatDisplay from "../components/chat/ChatDisplay";
 
 function Chat() {
   const { username } = useContext(ThemeContext);
-
+  // console.log("Chat");
   const [messageInput, setMessageInput] = useState(false); // to show input box when the socket is connected
 
   useEffect(() => {
-    if (!socket.connected && username) {
-      socket.connect();
+    // try {
+      if (!socket.connected && username) {
+        socket.connect();
 
-      socket.emit("joinRoom", username);
+        socket.emit("joinRoom", username);
 
-      socket.on("joinRoom", (data) => {
-        setMessageInput(true);
-      });
-    }
+        socket.on("joinRoom", (data) => {
+          setMessageInput(true);
+        });
+      }
 
     return () => {
-      socket.off("user-left");
+      socket.off("joinRoom");
       socket.connected && socket.disconnect();
     };
   }, [username]);
 
   return (
-    <>
-      {messageInput && (
-        <div className="container">
-          <ChatDisplay username={username} socket={socket} />
-        </div>
-      )}
-    </>
+    <>{
+      messageInput && <ChatDisplay username={username} socket={socket} />}</>
   );
 }
 
