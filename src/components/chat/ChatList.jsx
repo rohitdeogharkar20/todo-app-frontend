@@ -1,13 +1,10 @@
-import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
-
-const { VITE_BACKEND_URL } = import.meta.env;
 
 function ChatList(props) {
   const { setRoomName, socket, username, setShowMessage, roomName } = props;
   const [users, setUsers] = useState([]);
   // console.log("ChatList");
-  
+
   const sendParticipants = (name, e) => {
     if (roomName != name) {
       setRoomName(name);
@@ -17,6 +14,8 @@ function ChatList(props) {
         roomName: name,
         pagination: 0,
       });
+
+      socket.emit("userStatus", { username, roomName: name });
     }
   };
 

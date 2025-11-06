@@ -24,7 +24,7 @@ function ChatDisplay(props) {
         <div className="flex flex-1 flex-col">
           {roomName ? (
             <>
-              <ChatName roomName={roomName} />
+              <ChatName roomName={roomName} socket={socket} />
 
               <div className="flex-1 overflow-y-auto bg-gray-50">
                 <Messages
